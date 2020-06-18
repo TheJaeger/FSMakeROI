@@ -105,7 +105,7 @@ def main():
     nrois = len(lut_usr.index)
     if args.image:
         fn_prefix = op.splitext(op.basename(args.image))[0]
-        img = nib.load(args.image)
+        img = nib.load(args.image).dataobj
     else:
         fn_prefix = ''
         img = np.ones_like(aseg_img, dtype=bool)
@@ -115,7 +115,7 @@ def main():
         else:
             fn = op.join(args.output, lut_usr['Name'].iloc[i] + '.nii.gz')
         tqdm.write('Writing {}'. format(fn))
-        aseg_roi = (aseg_img == lut_usr['Label'].iloc[i]) * np.array(img.dataobj)
+        aseg_roi = (aseg_img == lut_usr['Label'].iloc[i]) * np.array(img)
         img_2_write = nib.Nifti1Image(
             aseg_roi,
             aseg.affine,
